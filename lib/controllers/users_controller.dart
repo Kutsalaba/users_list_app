@@ -4,15 +4,18 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:users_list_app/domain/shared_models/api/local_users_data.dart';
 import 'package:users_list_app/domain/shared_models/api/user_data.dart';
+import 'package:users_list_app/domain/shared_models/api/user_details.dart';
 import 'package:users_list_app/providers/user_provider.dart';
 
 class UsersController extends GetxController {
   final _userProvider = UsersProvider();
+  late Rx<UserDetails> _singleUserDetails;
+  UserDetails get singleUserDetails => _singleUserDetails.value;
 
   final _localUsersData = 'localUsersData';
-  RxList _usersList = [].obs;
+  RxList<UserData> _usersList = <UserData>[].obs;
 
-  RxList get usersList => _usersList;
+  RxList<UserData> get usersList => _usersList;
 
   Future<void> setUsersToList() async {
     _usersList = (await _userProvider.fetchUsers()).obs;
@@ -22,12 +25,12 @@ class UsersController extends GetxController {
   Future<RxList<UserData>> getUsers() async {
     await setUsersToList();
 
-    return usersList as RxList<UserData>;
+    return usersList;
   }
 
   Future<void> saveUsersToLocal() async {
     var prefs = await SharedPreferences.getInstance();
-    var localUsersData = LocalUsersData(_usersList as List<UserData>);
+    var localUsersData = LocalUsersData(_usersList);
     prefs.setString(_localUsersData, jsonEncode(localUsersData));
   }
 
@@ -38,7 +41,12 @@ class UsersController extends GetxController {
     _usersList = LocalUsersData.fromJson(jsonDecode(usersData)).usersData.obs;
   }
 
-  // Future<void> getUser(int id) async {
-  //   return (await _userProvider.fetchUser(id)).obs;
-  // }
+  Future<UserDetails> getUser(int id) async {
+    return (await _userProvider.fetchUser(id));
+  }
+
+  Future<void> setSingleUser(int id) async {
+    _singleUserDetails = (await _userProvider.fetchUser(id)).obs;
+    // TODO save local
+  }
 }

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:users_list_app/controllers/network_connection_controller.dart';
 import 'package:users_list_app/controllers/users_controller.dart';
 import 'package:users_list_app/pages/home/widgets/user_card.dart';
+import 'package:users_list_app/pages/user_detail/user_details_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -52,8 +53,14 @@ class HomePage extends StatelessWidget {
                                   horizontal: 20.w,
                                   vertical: 5.h,
                                 ),
-                                child: UserCard(
-                                  userData: usersController.usersList[index],
+                                child: GestureDetector(
+                                   onTap: () async {
+                                      await usersController.setSingleUser(usersController.usersList[index].id);
+                                      Get.to(() => const UserDetailsPage());
+                                    },
+                                  child: UserCard(
+                                    userData: usersController.usersList[index],
+                                  ),
                                 ),
                               );
                             },

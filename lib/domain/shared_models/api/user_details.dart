@@ -1,19 +1,22 @@
+import 'package:users_list_app/domain/shared_models/api/support_info.dart';
+import 'package:users_list_app/domain/shared_models/api/user_data.dart';
+
 class UserDetails {
-    final String url;
-    final String text;
+    final UserData data;
+    final SupportInfo support;
 
     UserDetails({
-        required this.url,
-        required this.text,
+        required this.data,
+        required this.support,
     });
 
     factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
-        url: json["url"],
-        text: json["text"],
+        data: UserData.fromJson(json["data"]),
+        support: SupportInfo.fromJson(json["support"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "url": url,
-        "text": text,
+        "data": data.toJson(),
+        "support": support.toJson(),
     };
 }
