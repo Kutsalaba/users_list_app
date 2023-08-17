@@ -24,9 +24,9 @@ class HomePage extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () async {
           if (networkConnectionController.isConnectedToInternet()) {
-            await usersController.setUsersFromLocal();
-          } else {
             await usersController.setUsersToList();
+          } else {
+            await usersController.setUsersFromLocal();
           }
         },
         child: FutureBuilder(
@@ -54,10 +54,21 @@ class HomePage extends StatelessWidget {
                                   vertical: 5.h,
                                 ),
                                 child: GestureDetector(
-                                   onTap: () async {
-                                      await usersController.setSingleUser(usersController.usersList[index].id);
-                                      Get.to(() => const UserDetailsPage());
-                                    },
+                                  onTap: () async {
+                                    if (networkConnectionController
+                                        .isConnectedToInternet()) {
+                                      await usersController.setSingleUser(
+                                        usersController.usersList[index].id,
+                                      );
+                                    } else {
+                                      await usersController
+                                          .setSingleUserFromLocal(
+                                        usersController.usersList[index].id,
+                                      );
+                                    }
+
+                                    Get.to(() => const UserDetailsPage());
+                                  },
                                   child: UserCard(
                                     userData: usersController.usersList[index],
                                   ),
@@ -73,7 +84,12 @@ class HomePage extends StatelessWidget {
                 );
               }
             }
-            return Center(child: Text('Something went wrong'));
+            return Center(
+              child: Text(
+                'Something went wrong',
+                style: Theme.of(context).primaryTextTheme.displayLarge,
+              ),
+            );
           },
         ),
       ),

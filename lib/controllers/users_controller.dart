@@ -9,10 +9,12 @@ import 'package:users_list_app/providers/user_provider.dart';
 
 class UsersController extends GetxController {
   final _userProvider = UsersProvider();
-  late Rx<UserDetails> _singleUserDetails;
-  UserDetails get singleUserDetails => _singleUserDetails.value;
+  late Rx<UserDetails?> _singleUserDetails;
+  UserDetails? get singleUserDetails => _singleUserDetails.value;
 
   final _localUsersData = 'localUsersData';
+  final _localSingleUser = 'localSingleUser';
+
   RxList<UserData> _usersList = <UserData>[].obs;
 
   RxList<UserData> get usersList => _usersList;
@@ -47,6 +49,22 @@ class UsersController extends GetxController {
 
   Future<void> setSingleUser(int id) async {
     _singleUserDetails = (await _userProvider.fetchUser(id)).obs;
-    // TODO save local
+    await saveSingleUserToLocal();
+  }
+
+  Future<void> saveSingleUserToLocal() async {
+    var prefs = await SharedPreferences.getInstance();
+    var userId = _singleUserDetails.value!.data.id;
+    prefs.setString('$_localSingleUser$userId', jsonEncode(_singleUserDetails.value));
+  }
+
+   Future<void> setSingleUserFromLocal(int id) async {
+    var prefs = await SharedPreferences.getInstance();
+    var userDetails = prefs.getString('$_localSingleUser$id');
+    if (userDetails == null) {
+      _singleUserDetails = null.obs;
+      return;
+    }
+    _singleUserDetails = UserDetails.fromJson(jsonDecode(userDetails)).obs;
   }
 }

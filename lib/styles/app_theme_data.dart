@@ -21,6 +21,11 @@ class AppThemeData {
           fontSize: 28.sp,
           fontWeight: FontWeight.w800,
         ),
+        displayLarge: TextStyle(
+          fontSize: 32.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.mediumGrey,
+        ),
         displayMedium: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w400,

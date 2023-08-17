@@ -13,19 +13,28 @@ class UserDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'User ',
+          usersController.singleUserDetails != null
+              ? '${usersController.singleUserDetails!.data.firstName} ${usersController.singleUserDetails!.data.lastName}'
+              : 'User',
           style: Theme.of(context).primaryTextTheme.titleLarge,
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 10.w,
-          vertical: 10.h,
-        ),
-        child: UserDetailsCard(
-          userDetails: usersController.singleUserDetails,
-        ),
-      ),
+      body: usersController.singleUserDetails != null
+          ? Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 10.h,
+              ),
+              child: UserDetailsCard(
+                userDetails: usersController.singleUserDetails!,
+              ),
+            )
+          : Center(
+              child: Text(
+                'Check your internet connection',
+                style: Theme.of(context).primaryTextTheme.displayLarge,
+              ),
+            ),
     );
   }
 }
