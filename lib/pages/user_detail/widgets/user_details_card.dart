@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:users_list_app/domain/shared_models/api/user_details.dart';
 import 'package:users_list_app/styles/app_colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UserDetailsCard extends StatelessWidget {
   const UserDetailsCard({
@@ -26,12 +27,27 @@ class UserDetailsCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CachedNetworkImage(),
-                Image.network(
-                  userData.avatarUrl ??
+                CachedNetworkImage(
+                  imageUrl: userData.avatarUrl ??
                       'https://avatars.githubusercontent.com/u/72203151?s=400&u=afb87dba1bf28a0797c1b4fdacd34002e31b5741&v=4',
                   width: 160.w,
                   fit: BoxFit.fitHeight,
+                  errorWidget: (context, url, error) {
+                    return Column(
+                      children: [
+                        Container(
+                          width: 64.w,
+                          height: 64.h,
+                          color: Colors.blue,
+                        ),
+                        Container(
+                          width: 64.w,
+                          height: 64.h,
+                          color: Colors.yellow,
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 16.w,

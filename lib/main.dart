@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
           color: AppColors.brandywineRaspberryColor,
           initialBinding: InitDependenices(),
           theme: AppThemeData().defaultThemeData,
