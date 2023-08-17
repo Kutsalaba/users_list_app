@@ -8,7 +8,7 @@ class UsersProvider extends GetConnect {
     try {
       var response = await get('https://reqres.in/api/users/$id');
       // if (response.statusCode == 200) {
-      var userDetails = UserDetails.fromJson(response.body['data']);
+      var userDetails = UserDetails.fromJson(response.body);
       return userDetails;
       // } else {
       //   throw ApiException('Invalid status code');

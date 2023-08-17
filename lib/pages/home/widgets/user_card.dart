@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:users_list_app/controllers/users_controller.dart';
 import 'package:users_list_app/domain/shared_models/api/user_data.dart';
 import 'package:users_list_app/styles/app_colors.dart';
 
@@ -15,7 +13,6 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UsersController usersController = Get.find();
     return Card(
       color: AppColors.incrementalBlueColor,
       child: Padding(
