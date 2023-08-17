@@ -17,7 +17,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const UserDetailsPage());
+        Get.to(() => const UserDetailsPage());
       },
       child: Card(
         color: AppColors.incrementalBlueColor,

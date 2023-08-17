@@ -12,16 +12,20 @@ class UsersProvider extends GetConnect {
     try {
       do {
         var response = await get('https://reqres.in/api/users?page=$numPage');
-        var body = response.body as Map;
-        if (body.containsKey('total_pages')) {
-          totalPage = body['total_pages'];
-        }
+        // if (response.statusCode == 200) {
+          var body = response.body as Map;
+          if (body.containsKey('total_pages')) {
+            totalPage = body['total_pages'];
+          }
 
-        var fetchedUsers = ((body['data'] as List).map<UserData>(
-          (user) => UserData.fromJson(user),
-        )).toList();
-        users.addAll(fetchedUsers);
-        numPage++;
+          var fetchedUsers = ((body['data'] as List).map<UserData>(
+            (user) => UserData.fromJson(user),
+          )).toList();
+          users.addAll(fetchedUsers);
+          numPage++;
+        // } else {
+        //   throw ApiException('Invalid status code');
+        // }
       } while (numPage <= totalPage);
     } on ApiException catch (e) {
       throw ApiException(e.message);
