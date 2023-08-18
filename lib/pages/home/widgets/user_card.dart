@@ -23,19 +23,19 @@ class UserCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: userData.avatarUrl ??
                   'https://avatars.githubusercontent.com/u/72203151?s=400&u=afb87dba1bf28a0797c1b4fdacd34002e31b5741&v=4',
-              width: 64.w,
+              width: 80.w,
               fit: BoxFit.fitHeight,
               errorWidget: (context, url, error) {
                 return Column(
                   children: [
                     Container(
-                      width: 64.w,
-                      height: 64.h,
+                      width: 80.w,
+                      height: 80.h,
                       color: Colors.blue,
                     ),
                     Container(
-                      width: 64.w,
-                      height: 64.h,
+                      width: 80.w,
+                      height: 80.h,
                       color: Colors.yellow,
                     ),
                   ],
