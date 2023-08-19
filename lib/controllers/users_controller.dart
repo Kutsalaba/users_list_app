@@ -19,15 +19,25 @@ class UsersController extends GetxController {
 
   RxList<UserData> get usersList => _usersList;
 
-  Future<void> setUsersToList() async {
-    _usersList = (await _userProvider.fetchUsers()).obs;
-    await saveUsersToLocal();
+  Future<void> updateUsers(bool isConnectedToInternet) async {
+    if (isConnectedToInternet) {
+      await _setUsersToList();
+    } else {
+      await _setUsersFromLocal();
+    }
   }
 
-  Future<RxList<UserData>> getUsers() async {
-    await setUsersToList();
+  Future<void> updateSingleUser(bool isConnectedToInternet, int id) async {
+    if (isConnectedToInternet) {
+      await _setSingleUser(id);
+    } else {
+      await _setSingleUserFromLocal(id);
+    }
+  }
 
-    return usersList;
+  Future<void> _setUsersToList() async {
+    _usersList = (await _userProvider.fetchUsers()).obs;
+    await saveUsersToLocal();
   }
 
   Future<void> saveUsersToLocal() async {
@@ -36,7 +46,7 @@ class UsersController extends GetxController {
     prefs.setString(_localUsersData, jsonEncode(localUsersData));
   }
 
-  Future<void> setUsersFromLocal() async {
+  Future<void> _setUsersFromLocal() async {
     var prefs = await SharedPreferences.getInstance();
     var usersData = prefs.getString(_localUsersData);
     if (usersData == null) return;
@@ -47,18 +57,19 @@ class UsersController extends GetxController {
     return (await _userProvider.fetchUser(id));
   }
 
-  Future<void> setSingleUser(int id) async {
+  Future<void> _setSingleUser(int id) async {
     _singleUserDetails = (await _userProvider.fetchUser(id)).obs;
-    await saveSingleUserToLocal();
+    await _saveSingleUserToLocal();
   }
 
-  Future<void> saveSingleUserToLocal() async {
+  Future<void> _saveSingleUserToLocal() async {
     var prefs = await SharedPreferences.getInstance();
     var userId = _singleUserDetails.value!.data.id;
-    prefs.setString('$_localSingleUser$userId', jsonEncode(_singleUserDetails.value));
+    prefs.setString(
+        '$_localSingleUser$userId', jsonEncode(_singleUserDetails.value));
   }
 
-   Future<void> setSingleUserFromLocal(int id) async {
+  Future<void> _setSingleUserFromLocal(int id) async {
     var prefs = await SharedPreferences.getInstance();
     var userDetails = prefs.getString('$_localSingleUser$id');
     if (userDetails == null) {

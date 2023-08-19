@@ -7,12 +7,12 @@ class UsersProvider extends GetConnect {
   Future<UserDetails> fetchUser(int id) async {
     try {
       var response = await get('https://reqres.in/api/users/$id');
-      // if (response.statusCode == 200) {
-      var userDetails = UserDetails.fromJson(response.body);
-      return userDetails;
-      // } else {
-      //   throw ApiException('Invalid status code');
-      // }
+      if (response.statusCode == 200) {
+        var userDetails = UserDetails.fromJson(response.body);
+        return userDetails;
+      } else {
+        throw ApiException('Invalid status code');
+      }
     } on ApiException catch (e) {
       throw ApiException(e.message);
     } on Exception catch (e) {
@@ -26,20 +26,20 @@ class UsersProvider extends GetConnect {
     try {
       do {
         var response = await get('https://reqres.in/api/users?page=$numPage');
-        // if (response.statusCode == 200) {
-        var body = response.body as Map;
-        if (body.containsKey('total_pages')) {
-          totalPage = body['total_pages'];
-        }
+        if (response.statusCode == 200) {
+          var body = response.body as Map;
+          if (body.containsKey('total_pages')) {
+            totalPage = body['total_pages'];
+          }
 
-        var fetchedUsers = ((body['data'] as List).map<UserData>(
-          (user) => UserData.fromJson(user),
-        )).toList();
-        users.addAll(fetchedUsers);
-        numPage++;
-        // } else {
-        //   throw ApiException('Invalid status code');
-        // }
+          var fetchedUsers = ((body['data'] as List).map<UserData>(
+            (user) => UserData.fromJson(user),
+          )).toList();
+          users.addAll(fetchedUsers);
+          numPage++;
+        } else {
+          throw ApiException('Invalid status code');
+        }
       } while (numPage <= totalPage);
     } on ApiException catch (e) {
       throw ApiException(e.message);
